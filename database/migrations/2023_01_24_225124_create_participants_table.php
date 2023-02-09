@@ -15,6 +15,13 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('dob');
+            $table->string('adress');
+            $table->string('email');
+            $table->string('cin');
+            $table->string('phone');
+            $table->string('qr_code');
             $table->timestamps();
         });
     }

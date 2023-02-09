@@ -1,0 +1,81 @@
+{
+ "navbar":{
+    "home":"الصفحة الرئيسية",
+    "welcome": "arbic",
+    "News": "الاخبار",
+    "Podcasts": "التسجيلات",
+    "Programs":"البرامج",
+    "Contact": "اتصل بنا",
+    "About": "في ما يخصنا",
+    "Gallery": "صور",
+    "Images": "الصور",
+    "category": [
+      "رياضية", "وطنية", "دولية" , "إقليمية", "اقتصادية", "سياسية"
+    ],
+    "nonewswith":"لا يوجد حاليا"
+ },
+ "podcast": {
+   "Podcasts": "التسجيلات",
+   "allprograms": "كل البرامج",
+   "by": "أنشأها"
+ },
+ "images": {
+  "Images": "الصور"
+},
+"program":{
+  "Programs":"البرامج"
+},
+"home":{
+  "Recent Post" : "آخر الاخبار",
+  "Popular Post": "الاخبار المنتشرة",
+  "Sport":  "رياضة",
+  "Posted": "تاريخ النشر",
+  "Nationale": "الأخبار الوطنية"
+},
+"author":{
+  "Author": "المنشط"
+} ,
+"connected":{
+  "stay-connected":"ابق على اتصال"
+},
+"other-images":{
+  "other": "اقتراحات لك"
+},
+"breadcrumb":{
+  "home":"الرئيسية",
+  "News": "الاخبار",
+  "Details": "التفاصيل",
+  "Animators": "في ما يخصنا",
+  "Programs":"البرامج"
+},
+"trending": {
+  "trending" : "الاخبار المنتشرة"
+},
+"contact": {
+  "contact" : "اتصل بنا",
+  "name" : "اسمك",
+  "email": "بريدك الالكتروني",
+  "subject": "الموضوع",
+  "message": "الرسالة",
+  "submit" : "أرسل",
+  "info": "معلومات الموقع",
+  "find": "تجدنا على"
+},
+
+"control":{
+  "The name field is required": "مطلوب إكمال حقل الاسم.",
+  "The email must be a valid email address": "يجب أن يكون البريد الإلكتروني عنوان بريد إلكتروني صالحًا.",
+  "The subject field is required": "حقل الموضوع إلزامي.",
+  "The body field is required": "حقل الرسالة إلزامي.",
+  "The name must be at least 3 characters": "يجب أن يحتوي الاسم على 3 أحرف على الأقل.",
+  "The subject must be at least 3 characters": "يجب أن يتكون الموضوع من 3 أحرف على الأقل.",
+  "The body must be at least 10 characters" : "يجب ألا يقل حقل الرسالة عن 10 أحرف."
+},
+"about":{
+  "About Us": "في ما يخصنا",
+  "Team": "أعضاء فريق المنشطين"
+}
+
+
+
+}

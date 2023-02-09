@@ -1,0 +1,82 @@
+{
+    "navbar":{
+       "home":"pricipale",
+       "welcome":"fr",
+       "News": "Nouvelles",
+       "Podcasts": "Balados",
+       "Programs":"Les emissions",
+       "Contact": "Contact",
+       "About": "A propos",
+       "Gallery": "Galerie",
+       "Images": "Images",
+       "category": [
+         "Sport", "Nationale", "Internationale" , "Régionale", "Économie", "Politique"
+       ],
+       "nonewswith":"il ya pas  un article avec la mot"
+    },
+
+    "podcast": {
+      "Podcasts": "Liste des balados",
+      "allprograms": "Tous les programmes",
+      "by": "Par"
+    },
+    "program":{
+      "Programs":"Les emissions"
+    },
+    "images": {
+      "Images": "Images"
+    },
+    "home":{
+      "Recent Post" : "Les dernières actualités",
+      "Popular Post": "Populaires",
+      "Sport":  "Sport",
+      "Posted": "Publier le ",
+      "Nationale": "Nationale"
+    },
+    "author":{
+      "Author": "Animateur"
+    } ,
+    "connected":{
+      "stay-connected":"Rester connecté"
+    },
+    "other-images":{
+      "other": "Autre"
+    },
+    "breadcrumb":{
+      "home":"Pricipale",
+      "News": "Nouvelles",
+      "Details": "Détails",
+      "Animators": "A propos",
+      "Programs":"Les emissions"
+    },
+    "trending": {
+      "trending" : "Populaires"
+    },
+    "contact": {
+      "contact" : "Contacter Nous",
+      "name" : "Votre nom",
+      "email": "Votre email",
+      "subject": "Sujet",
+      "message": "Votre message",
+      "submit" : "Envoyez",
+      "info": "Informations",
+      "find": "Trouver nous"
+    },
+    "control":{
+      "The name field is required": "Il est requis de compléter le champ correspondant au nom.",
+      "The email must be a valid email address": "L'e-mail doit être une adresse e-mail valide.",
+      "The subject field is required": "Le champ Sujet est obligatoire.",
+      "The body field is required": "Le champ Message est obligatoire.",
+      "The name must be at least 3 characters": "Le nom doit comporter au moins 3 caractères.",
+      "The subject must be at least 3 characters": "Le sujet doit comporter au moins 3 caractères.",
+      "The body must be at least 10 characters" : "Le champ Message doit comporter au moins 10 caractères."
+    },
+    "about":{
+      "About Us": "À propos de nous",
+      "Team": "Nos Animateurs"
+    }
+
+
+
+
+   }

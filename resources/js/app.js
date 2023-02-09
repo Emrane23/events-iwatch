@@ -5,20 +5,33 @@
  */
 
 import './bootstrap';
+import { i18n } from "./i18n.js";
 import { createApp } from 'vue';
+import router from './routes/routes';
+import store from "./store";
+import QrReader from 'vue3-qr-reader';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
 
-/**
- * Next, we will create a fresh Vue application instance. You may then begin
- * registering components with the application instance so they are ready
- * to use in your application's views. An example is included for you.
- */
+
 
 const app = createApp({});
+app.use(QrReader);
+app.use(router);
+app.use(store);
+app.use(i18n);
 
-import ExampleComponent from './components/ExampleComponent.vue';
-app.component('example-component', ExampleComponent);
+
+import ScanQrComponent from './components/ScanQrComponent.vue';
+app.component('example-component', ScanQrComponent);
 import GlobalComponent from './components/GlobalComponent.vue';
 app.component('global-component', GlobalComponent);
+import AddParticipantComponent from './components/AddParticipantComponent.vue';
+app.component('add-participant', AddParticipantComponent);
+import App from './components/App.vue';
+app.component('app', App);
+import Footer from './components/Footer.vue';
+app.component('footer-component', Footer);
 
 /**
  * The following block of code may be used to automatically register your
