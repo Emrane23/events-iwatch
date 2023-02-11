@@ -19,6 +19,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'occupation',
+        'sexe',
+        'phone',
+        'age',
+        'qr_code',
         'permissions',
     ];
 
