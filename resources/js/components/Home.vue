@@ -1,7 +1,7 @@
 <template>
-    <div class="w-60 mt-2 alert alert-warning text-center" v-if="alertMessage" role="alert">
+    <div :class="'w-60 mt-2 alert alert-'+alertMessage[1] " v-if="alertMessage" role="alert">
       <i class="fa fa-check" aria-hidden="true"></i>
-      {{ alertMessage }}
+      {{ alertMessage[0] }}
     </div>
   <div class="cont">
     <h1>Integrity Mall VI | 2023 مؤتمر النزاهة</h1>
@@ -39,11 +39,15 @@ export default {
     isLogged() {
       return this.$store.getters.isLogged;
     },
-    computed:{
     alertMessage(){
         return this.$store.getters.getAlert ;
     },
-  },
+    
+  //   computed:{
+  //   alertMessage(){
+  //       return this.$store.getters.getAlert ;
+  //   },
+  // },
   },
 };
 </script>

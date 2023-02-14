@@ -25,7 +25,9 @@ const store = createStore({
         },
         isModerator(state) {
             if (state.user) {
-                return state.user.is_admin
+                if (state.user.roles.length > 0  && state.user.roles[0].name == 'Moderateur') {
+                    return state.user.roles[0].name
+                }
             }
             return null;
         },
@@ -54,6 +56,9 @@ const store = createStore({
             state.user = user;
             // Echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${state.userToken}`;
         },
+        setQrCapture(state,qrCapture){
+
+        },
         setAlert(state,alert){
             state.alertMessage[0] = alert ;
             setTimeout(() => {
@@ -69,14 +74,11 @@ const store = createStore({
         register({ commit }, payload){
             commit('setUserToken',payload)
         },
-       async loginUser({commit},parametres){
-               
-        },
-       async getUser({ dispatch, commit }){
-          await  axios.get('/api/user')
-                .then( res => {
+       async getUser({commit }){
+           const res= await axios.get('/api/user')
+                
                    commit('setUser',res.data.user);
-                })
+            
         }
     },
     modules: {

@@ -1,110 +1,132 @@
 <template>
   <div>
-    <div class="w-60 mt-2 alert alert-success" v-if="alert" role="alert">
-      <i class="fa fa-check" aria-hidden="true"></i>
-      Participant saved successfully!
-    </div>
     <div class="container my-4 mt-4 mb-4">
       <button
-        class="btn btn-info text-white mr-1"
+        class="btn btn-primary text-white mr-1"
         type="button"
         @click="visible = !visible"
       >
-        <i class="fa fa-plus"></i> Add New Card
+        <i class="fa fa-plus"></i> Créé un participant
       </button>
 
-      <a href="id-card.php" class="btn btn-info text-white">
-        <i class="fa fa-address-card"></i> Generate ID Card
-      </a>
+      <button class="btn btn-primary text-white" @click="qrImage()">
+        <i class="fa fa-qrcode" aria-hidden="true"></i> Enregistrer Avec fichier
+        QrCode
+      </button>
 
       <div class="mt-4 mb-4" v-if="visible">
         <div class="card card-body">
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputCity">Participant Name</label>
-              <input
-                v-model="details.name"
-                type="text"
-                name="name"
-                class="form-control"
-                id="inputCity"
-              />
-            </div>
-            <div class="form-group col-md-4">
-              <label for="inputState">Panel</label>
-              <select name="grade" class="form-control" v-model="details.panel">
-                <option selected>Choose...</option>
-                <option value="1st">1st</option>
-                <option value="2nd">2nd</option>
-                <option value="3rd">3rd</option>
-                <option value="4th">4th</option>
-              </select>
-            </div>
-            <div class="form-group col-md-2">
-              <label for="inputZip">Date Of Birth</label>
-              <input
-                type="date"
-                name="dob"
-                class="form-control"
-                v-model="details.dob"
-              />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputCity">Address</label>
-              <input
-                type="text"
-                name="address"
-                class="form-control"
-                v-model="details.adress"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label for="inputState">Email</label>
-              <input
-                type="text"
-                name="email"
-                class="form-control"
-                v-model="details.email"
-              />
-            </div>
-          </div>
+          <form action="javascript:void(0)" class="row" method="post">
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputPassword4">Nom complet</label>
+                  <input
+                    v-model="name"
+                    type="text"
+                    :class="['form-control', errors.name ? 'is-invalid' : '']"
+                    id="inputPassword4"
+                    placeholder="Nom"
+                  />
+                  <div
+                    v-if="errors.name"
+                    class="invalid-feedback"
+                  >
+                    {{ errors.name[0] }}</div
+                  >
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputEmail4">Email</label>
+                  <input
+                    v-model="email"
+                    type="email"
+                    :class="['form-control', errors.email ? 'is-invalid' : '']"
+                    id="inputEmail4"
+                    placeholder="Email"
+                  />
+                  <div
+                    v-if="errors.email"
+                    class="invalid-feedback"
+                    >{{ errors.email[0] }}
+                </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputPro">Profession</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="occupation"
+                    id="inputPro"
+                    placeholder="Profession"
+                  />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputsex">Sexe</label>
+                  <select
+                    id="inputsex"
+                    :class="['form-select', errors.sexe ? 'is-invalid' : '']"
+                    v-model="sexe"
+                  >
+                    <option disabled selected value="">Choisir...</option>
+                    <option value="Homme">Homme</option>
+                    <option value="Femme">Femme</option>
+                    <option value="Autre">Autre</option>
+                  </select>
+                  <div
+                    v-if="errors.sexe"
+                    class="invalid-feedback"
+                  >{{ errors.sexe[0] }}
+                  </div>
+                </div>
+              </div>
 
-          <div class="form-row">
-            <div class="form-group col-md-3">
-              <label for="id_no"></label>
-              <input
-                class="form-control"
-                id="id_no"
-                name="id_no"
-                v-model="details.cin"
-              />
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputCity">Télephone</label>
+                  <input
+                    type="text"
+                    v-model="phone"
+                    class="form-control"
+                    id="inputCity"
+                    placeholder="Télephone"
+                  />
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="inputAge">Âge</label>
+                  <input
+                    type="number"
+                    v-model="age"
+                    class="form-control"
+                    id="inputAge"
+                    placeholder="Âge"
+                  />
+                </div>
+              </div>
+              <div class="form-group col-md-3" v-if="qrcode">
+                <img
+                  width="130"
+                  height="130"
+                  :src="'/temp/' + qrcode"
+                  class="img-thumbnail img-fluid"
+                  alt=""
+                />
+              </div>
+              <button
+                @click="saveParticipant"
+                type="submit"
+                :disabled="loading"
+                class="btn btn-primary text-white"
+              >
+                <div
+                  v-if="loading"
+                  class="spinner-border spinner-border-sm"
+                ></div>
+                <template v-else><i class="fa fa-plus"></i> Add Card</template>
+              </button>
             </div>
-            <div class="form-group col-md-3">
-              <label for="phone">Phone Number</label>
-              <input
-                class="form-control"
-                id="phone"
-                name="phone"
-                v-model="details.phone"
-              />
-            </div>
-            <!-- <div class="form-group col-md-4">
-                        <label for="photo">Photo</label>
-                        <input type="file" name="image" />
-                    </div> -->
-          </div>
-
-          <button
-            @click="saveParticipant"
-            type="submit"
-            :disabled="loading"
-            class="btn btn-info text-white"
-          >
-          <div v-if="loading" class="spinner-border spinner-border-sm"></div>
-           <template v-else><i class="fa fa-plus"></i> Add Card</template> 
-          </button>
+          </form>
         </div>
       </div>
     </div>
@@ -112,60 +134,81 @@
 </template>
 
 <script>
+import { toast } from "vue3-toastify";
+
 export default {
-    data() {
+  data() {
     return {
       visible: false,
+      qrcode: false,
       alert: false,
       loading: false,
-      details: {
-        name: "",
-        dob: "",
-        adress: "",
-        email: "",
-        cin: "",
-        phone: "",
-      },
+      qrcode: null,
+      name: "",
+      email: "",
+      errors: [],
+      sexe: "",
+      phone: "",
+      occupation: "",
+      age: "",
+      moderator: localStorage.getItem("userToken"),
     };
   },
-  components: {
-    
-  },
+  components: {},
   methods: {
+    qrImage() {
+      this.$emit("qrImage", (this.qrcode = !this.qrcode));
+    },
     async saveParticipant() {
       this.loading = true;
+      let { name, email, sexe, phone, occupation, age, moderator } = this;
       axios
-        .post("api/participant", this.details)
+        .post("api/register", {
+          name,
+          email,
+          sexe,
+          phone,
+          occupation,
+          age,
+          moderator,
+        })
         .then((res) => {
-          if (res.data.status == "error") {
-            // this.errors = res.data.errors;
+         if (res.data.status == "success") {
+            this.errors = [];
+
             this.loading = false;
-          } else if (res.data.status == "success") {
-            // this.errors = [];
-            this.loading = false;
-            this.details = {
-              email: "",
-              name: "",
-              dob: "",
-              phone: "",
-              cin: "",
-              adress: "",
-            };
-            this.alert = true;
+            (this.name = ""),
+              (this.email = ""),
+              (this.sexe = ""),
+              (this.phone = ""),
+              (this.occupation = ""),
+              (this.age = ""),
+              (this.qrcode = res.data.qr_code),
+              toast.success(res.data.message, {
+                autoClose: 3000,
+              });
             setTimeout(() => {
-              this.alert = false;
-            }, 3000);
-            
+              this.forceFileDownload(res.data.qr_code);
+            }, 4000);
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(({ response })=> {
+          this.errors = response.data.errors;
+            this.loading = false;
         });
     },
+
+    forceFileDownload(file) {
+      const url = window.location.origin + "/temp/" + file;
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", file);
+      document.body.appendChild(link);
+      link.click();
+    },
   },
-}
+};
 </script>
 
 <style>
-
 </style>

@@ -10,6 +10,8 @@ import { createApp } from 'vue';
 import router from './routes/routes';
 import store from "./store";
 import QrReader from 'vue3-qr-reader';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css' 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 
@@ -19,6 +21,7 @@ const app = createApp({});
 app.use(QrReader);
 app.use(router);
 app.use(store);
+app.use(NProgress);
 app.use(i18n);
 
 

@@ -18,21 +18,21 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto">
           <li :class="['nav-item', this.$route.path == '/' ? 'active' : '']">
-            <router-link class="nav-link" to="/">Home</router-link>
+            <router-link class="nav-link" to="/">Dashboard</router-link>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="isModerator">
             <router-link
               to="/qrscan"
               :class="[
                 'nav-link',
                 this.$route.path == '/qrscan' ? 'active' : '',
               ]"
-              >Participant
+              >Enregistrer les participant
             </router-link>
           </li>
 
           <template v-if="isLogged">
-            <li class="nav-item">
+            <li class="nav-item" v-if="!isModerator">
             <router-link
               to="/contact"
               :class="[
@@ -51,15 +51,15 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {{ currentUserLogged?.name }}
+              <i class="fa fa-user" aria-hidden="true" ></i> {{ currentUserLogged?.name }}
               </a>
               <ul
                 class="dropdown-menu dropdown-menu-end"
                 aria-labelledby="navbarDropdown"
               >
-                <li><router-link class="dropdown-item" to="/profile" type="button"><i class="fa fa-user" aria-hidden="true"></i> Profile</router-link></li>
+                <li v-if="!isModerator"><router-link class="dropdown-item" to="/profile" type="button"><i class="fa fa-user" aria-hidden="true" ></i> Profile</router-link></li>
                 <li>
-                  <hr class="dropdown-divider" />
+                  <hr class="dropdown-divider" v-if="!isModerator" />
                 </li>
                 <li><a class="dropdown-item" type="button" @click="Logout()"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
                 <!-- <li><a class="dropdown-item" href="#">Something else here</a></li> -->
@@ -143,16 +143,19 @@ export default {
     currentUserLogged() {
       return this.$store.getters.currentUserLogged;
     },
+    isModerator(){
+      return this.$store.getters.isModerator
+    }
   },
   mounted() {
-    if (this.isLogged) {
+    if (this.isLogged && (window.location.pathname != "/contact" || window.location.pathname != "/profile" ) ) {
       this.getUser();
     }
   },
   methods: {
-    getUser() {
-      this.$store.dispatch("getUser");
-      this.user = this.$store.state.user;
+   async getUser() {
+     await this.$store.dispatch("getUser");
+      // this.user = this.$store.state.user;
     },
     updateToken() {
       let token = JSON.parse(localStorage.getItem("userToken"));

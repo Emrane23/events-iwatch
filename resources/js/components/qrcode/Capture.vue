@@ -11,7 +11,7 @@
   </template>
   
   <script>
-  import { defineComponent, reactive, toRefs } from 'vue';
+  import { defineComponent, reactive, toRefs, watch } from 'vue';
   import  {QrCapture}  from 'vue3-qr-reader';
   export default defineComponent({
     name: 'QrCaptureExample',
@@ -29,6 +29,19 @@
         ...toRefs(state),
         onDecode
       }
+    },
+    methods:{
+      qrCodeCaptureEvent() {
+      this.$emit("qrCodeCapture", (this.data));
+    },
+    },
+    watch:{
+      data: function (data, old) {
+      if (data) {
+       this.qrCodeCaptureEvent(data);
+      }
+    },
     }
+
   });
   </script>

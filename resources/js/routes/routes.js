@@ -8,6 +8,8 @@ import Register from "../components/Register.vue";
 import Home from "../components/Home.vue";
 import Contact from "../components/Contact.vue";
 import Profil from "../components/Profile.vue";
+import { defineAsyncComponent } from 'vue'
+import NProgress from 'nprogress';
 import store from "../store";
 
 
@@ -76,8 +78,8 @@ const routes = [
     //         title: `404`
     //     }
     // },
-    
-    
+
+
 ];
 
 
@@ -86,28 +88,50 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+    if (to.name) {
+        // Start the route progress bar.
+        NProgress.start()
+    }
     document.title = to.meta.title
-
+    NProgress.start()
     if (to.meta.middleware == "accessible") {
-            next() 
+        next()
     }
     if (to.meta.middleware == "guest") {
         if (store.state.userToken) {
+            store.commit("setAlert", ["Vous êtes déjà connecté!", "success"])
             next({ name: "home" })
         }
         next()
     } else {
-        if (to.meta.middleware == "protected" && store.state.userToken) {
-            next()
-        } else {
-            if (to.meta.middleware == "protected" && !store.state.userToken) {
-                
-                store.commit("setAlert","Désolé, vous devez d'abord vous connecter!")
-                next({ name: "login" })
-            }
+        if (to.meta.middleware == "protected") {
+           const setUser = await store.dispatch('getUser').then((response) => {
+
+               if (store.state.userToken && store.state.user.roles.length < 1) {
+                   next()
+               } else {
+                   if (!store.state.userToken) {
+                       store.commit("setAlert", ["Désolé, vous devez d'abord vous connecter!", "warning"])
+                       next({ name: "login" })
+                   } else if (to.meta.middleware == "protected" && store.state.user.roles.length > 0) {
+                       store.commit("setAlert", ["Désolé, vous n'êtes pas autorisé à accéder à la page requise!", "danger"])
+                       next({ name: "home" })
+                   }
+               }
+
+           }).catch(()=>{
+            store.commit("setAlert", ["Désolé, vous devez d'abord vous connecter!", "warning"])
+                       next({ name: "login" })
+           }) ;
         }
+
     }
 })
+
+router.afterEach(() => {
+    // Complete the animation of the route progress bar.
+    NProgress.done()
+  })
 
 export default router;

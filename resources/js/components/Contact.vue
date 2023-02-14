@@ -72,7 +72,7 @@
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3192.6473672836787!2d10.146856314123834!3d36.85092057993817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd3462dc4b116d%3A0xb21b90d2e68fd33e!2zSSBXQVRDSCBPcmdhbmlzYXRpb24gLSDZhdmG2LjZkdmF2Kkg2KPZhtinINmK2YLYuA!5e0!3m2!1sfr!2stn!4v1676035786324!5m2!1sfr!2stn"
                     width="500"
-                    height="450"
+                    height="528"
                     style="border: 0"
                     allowfullscreen=""
                     loading="lazy"
@@ -81,7 +81,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-md-3">
                 <div class="dbox w-100 text-center">
                   <div
@@ -159,7 +159,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

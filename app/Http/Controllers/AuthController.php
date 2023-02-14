@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MailWelcome;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use QRcode;
 
 class AuthController extends Controller
 {
@@ -17,25 +20,45 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-
+        
+        if ($request->has('moderator')) {
+            $request['password']= '12345678';
+        }
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3',
+            'name' => 'required|min:3|regex:/^[\pL\s\-]+$/u',
+            'sexe' => 'required',
+            'phone' => 'required|numeric|digits:8',
             'email' => 'required|email:rfc,dns|unique:users',
-            // 'password' => 'required|min:6',
+            'password' => 'required|confirmed|min:6',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json(['status'=>'error','errors' => $validator->errors()],422);
         }
+        $code = $request->email;
+        $filename = 'test' . md5($code) . '.png';
+        include(app_path() . '/phpqrcode/qrlib.php');
+        QRcode::png($code, \public_path("temp/$filename"));
+        $details = [
+            'name' => $request->name,
+            'qrcode' => "temp/$filename"
+        ];
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $request->email,     
+            'phone' => $request->phone,     
+            'sexe' => $request->sexe,     
+            'qr_code' => $filename,
             'password' => bcrypt($request->password)
         ]);
 
+        Mail::to($request->email)->send(new MailWelcome($details));
+        if ($request->has('moderator')) {
+            return response()->json(['status'=>'success','message'=>'Compte crée avec succées!','token' => null, 'user' => $user,'qr_code'=> $filename], 200);
+        }
         $token = $user->createToken('token')->accessToken;
 
-        return response()->json(['token' => $token, 'user' => $user], 200);
+        return response()->json(['message'=>'Votre compte est crée avec succées!', 'token' => $token, 'user' => $user], 200);
     }
 
     /**
@@ -51,8 +74,8 @@ class AuthController extends Controller
             'password' => $request->password
         ];
 
-        $searchAccount =User::where('email',$credentials['email'])->first();
-        if(!$searchAccount){
+        $searchAccount = User::where('email', $credentials['email'])->first();
+        if (!$searchAccount) {
             return response()->json(['error' => 'Compte non trouvé !'], 401);
         }
 
@@ -71,7 +94,8 @@ class AuthController extends Controller
      */
     public function details()
     {
-        return response()->json(['user' => auth()->user()], 200);
+        $user = Auth::user()->load(['roles']);
+        return response()->json(['user' => $user], 200);
     }
 
 

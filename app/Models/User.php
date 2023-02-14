@@ -72,4 +72,8 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    public function participation(){
+        return $this->belongsToMany(Panel::class , 'participations', 'user_id','panel_id')->withTimestamps();
+    }
 }

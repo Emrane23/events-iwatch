@@ -1,5 +1,4 @@
 <template>
-  <div class="card"></div>
   <div class="row justify-content-center">
     <div class="col-md-6 text-center mb-4 mt-5">
       <h2 class="heading-section">Profile</h2>
@@ -14,20 +13,26 @@
             <input
               v-model="user.name"
               type="text"
-              class="form-control"
+              :class="['form-control', errors.name ? 'is-invalid' : '']"
               id="inputPassword4"
               placeholder="Nom"
             />
+            <div v-if="errors.name" class="invalid-feedback">
+              {{ errors.name[0] }}
+            </div>
           </div>
           <div class="form-group col-md-6">
             <label for="inputEmail4">Email</label>
             <input
               v-model="user.email"
               type="email"
-              class="form-control"
+              :class="['form-control', errors.email ? 'is-invalid' : '']"
               id="inputEmail4"
               placeholder="Email"
             />
+            <div v-if="errors.email" class="invalid-feedback">
+              {{ errors.email[0] }}
+            </div>
           </div>
         </div>
         <div class="form-row">
@@ -45,11 +50,11 @@
             <label for="inputsex">Sexe</label>
             <select
               id="inputsex"
-              class="form-control"
+              :class="['form-control', errors.sexe ? 'is-invalid' : '']"
               v-model="$store.state.user.sexe"
             >
               <option disabled :selected="user.sexe == null ? true : false">
-                Choose...
+                Choisir...
               </option>
               <option
                 value="Homme"
@@ -70,6 +75,9 @@
                 Autre
               </option>
             </select>
+            <div v-if="errors.sexe" class="invalid-feedback">
+              {{ errors.sexe[0] }}
+            </div>
           </div>
         </div>
 
@@ -79,10 +87,13 @@
             <input
               type="text"
               v-model="user.phone"
-              class="form-control"
+              :class="['form-control', errors.phone ? 'is-invalid' : '']"
               id="inputCity"
               placeholder="Télephone"
             />
+            <div v-if="errors.phone" class="invalid-feedback">
+              {{ errors.phone[0] }}
+            </div>
           </div>
           <div class="form-group col-md-3">
             <label for="inputAge">Âge</label>
@@ -98,7 +109,7 @@
             <img
               width="130"
               height="130"
-              src="/temp/test57ca366ccfda16be6de473fd21a744d0.png"
+              :src="'/temp/' + user.qr_code"
               class="img-thumbnail img-fluid"
               alt=""
             />
@@ -127,11 +138,17 @@ export default {
     return {
       processing: false,
       oldCredentials: null,
+      errors: [],
     };
   },
   computed: {
-    user() {
-      return this.$store.getters.currentUserLogged;
+    user: {
+      get(){       
+        return this.$store.state.user;
+      },
+      // set(value){
+      //   this.$store.commit("setUser", value);
+      // }
     },
   },
   mounted() {
@@ -153,15 +170,20 @@ export default {
           occupation,
           age,
         })
-        .then((res) => {
-          this.processing = false;
-          this.$store.commit("setUser", res.data.user);
+        .then(async (response) => {
+          this.errors = [];
+         await this.$store.commit("setUser", response.data.user);
           toast.success("Votre profile est mettre à jour avec succès!", {
             autoClose: 3000,
           });
+          // this.processing = false;
         })
-        .catch((err) => console.log(err));
-      this.body = "";
+        .catch(({ response }) => {
+          this.errors = response.data.errors;
+          this.processing = false;
+        }).finally(() => {
+          this.processing = false;
+        });;
     },
   },
 };

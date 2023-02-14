@@ -1,7 +1,7 @@
 <template>
-    <div class="w-60 mt-2 alert alert-warning " v-if="alertMessage" role="alert">
+    <div :class="'w-60 mt-2 alert alert-'+alertMessage[1] " v-if="alertMessage" role="alert">
       <i class="fa fa-check" aria-hidden="true"></i>
-      {{ alertMessage }}
+      {{ alertMessage[0] }}
     </div>
   <div class="login">
     <div class="row h-100 align-items-center">
@@ -96,18 +96,14 @@ export default {
     async login() {
       this.processing = true;
       let { email, password } = this;
-      await axios
-        .post("/api/login", { email, password })
-        .then((res) => {
-          this.$store.commit("setUserToken", res.data.token);
-          axios.get("/api/user").then((res) => {      
-            this.$store.commit("setUser", res.data);
+      await axios.post("/api/login", { email, password }).then((response) => {
+        console.log(response.data.user);
+          this.$store.commit("setUserToken", response.data.token);    
+          this.$store.commit("setUser", response.data.user);
             this.processing = false;
             window.location.href = "/";
             // this.$store.commit("setAlert", `Bienvenue dans notre appliction ${res.data.user.name} !`);
             // console.log(this.$store.getters.user.name);
-            
-          });
         })
         .catch(({ response }) => {
             if (response.status === 401) {
@@ -117,7 +113,8 @@ export default {
                 this.validationErrors = '';
                 alert("error 500! something went wrong *.* ");
           }
-
+        }).finally(()=> {
+          // this.$store.commit("setAlert", `Bienvenue dans notre appliction ${this.$store.state.name} !`);
         });
     },
   },
