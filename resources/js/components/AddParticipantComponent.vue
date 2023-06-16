@@ -21,19 +21,22 @@
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="inputPassword4">Nom complet</label>
-                  <input
-                    v-model="name"
-                    type="text"
-                    :class="['form-control', errors.name ? 'is-invalid' : '']"
-                    id="inputPassword4"
-                    placeholder="Nom"
-                  />
-                  <div
-                    v-if="errors.name"
-                    class="invalid-feedback"
-                  >
-                    {{ errors.name[0] }}</div
-                  >
+                    <div class="autocomplete-items col-md-12" v-if="searchName.length">
+                      <div :class="[ autocomplete_active ? 'autocomplete-active' : '']" v-for="name in searchName" :key="name" @click="selectName(name)">
+                      {{ name }}
+                      </div>
+                    </div>
+                    <input
+                      v-model="name"
+                      type="text"
+                      :class="['form-control', errors.name ? 'is-invalid' : '']"
+                      id="inputPassword4"
+                      placeholder="Nom"
+                    />
+                  
+                  <div v-if="errors.name" class="invalid-feedback">
+                    {{ errors.name[0] }}
+                  </div>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="inputEmail4">Email</label>
@@ -44,11 +47,9 @@
                     id="inputEmail4"
                     placeholder="Email"
                   />
-                  <div
-                    v-if="errors.email"
-                    class="invalid-feedback"
-                    >{{ errors.email[0] }}
-                </div>
+                  <div v-if="errors.email" class="invalid-feedback">
+                    {{ errors.email[0] }}
+                  </div>
                 </div>
               </div>
               <div class="form-row">
@@ -74,10 +75,8 @@
                     <option value="Femme">Femme</option>
                     <option value="Autre">Autre</option>
                   </select>
-                  <div
-                    v-if="errors.sexe"
-                    class="invalid-feedback"
-                  >{{ errors.sexe[0] }}
+                  <div v-if="errors.sexe" class="invalid-feedback">
+                    {{ errors.sexe[0] }}
                   </div>
                 </div>
               </div>
@@ -88,10 +87,13 @@
                   <input
                     type="text"
                     v-model="phone"
-                    class="form-control"
+                    :class="['form-control', errors.phone ? 'is-invalid' : '']"
                     id="inputCity"
                     placeholder="Télephone"
                   />
+                  <div v-if="errors.phone" class="invalid-feedback">
+                    {{ errors.phone[0] }}
+                  </div>
                 </div>
                 <div class="form-group col-md-3">
                   <label for="inputAge">Âge</label>
@@ -104,7 +106,7 @@
                   />
                 </div>
               </div>
-              <div class="form-group col-md-3" v-if="qrcode">
+              <div class="form-group col-md-3" v-if="qrcode!= null">
                 <img
                   width="130"
                   height="130"
@@ -123,7 +125,7 @@
                   v-if="loading"
                   class="spinner-border spinner-border-sm"
                 ></div>
-                <template v-else><i class="fa fa-plus"></i> Add Card</template>
+                <template v-else><i class="fa fa-plus"></i> Ajouter</template>
               </button>
             </div>
           </form>
@@ -140,10 +142,12 @@ export default {
   data() {
     return {
       visible: false,
-      qrcode: false,
       alert: false,
+      qr_code :false ,
+      autocomplete_active: false,
       loading: false,
       qrcode: null,
+      names: null,
       name: "",
       email: "",
       errors: [],
@@ -154,13 +158,35 @@ export default {
       moderator: localStorage.getItem("userToken"),
     };
   },
+  beforeMount() {
+    this.getAllNames();
+  },
+  computed: {
+    searchName() {
+      if (this.name === "") {
+        return [];
+      }
+      let matches = 0;
+      return this.names.filter((namesfiltred,index) => {
+        if (
+          namesfiltred.toLowerCase().includes(this.name.toLowerCase()) &&
+          matches < 5
+        ) {
+          matches++;
+          
+          return namesfiltred;
+        }
+      });
+    },
+  },
   components: {},
   methods: {
     qrImage() {
-      this.$emit("qrImage", (this.qrcode = !this.qrcode));
+      this.$emit("qrImage", (this.qr_code = !this.qr_code));
     },
     async saveParticipant() {
       this.loading = true;
+     this.name = this.name.replace(/^\s+|\s+$/gm,'');
       let { name, email, sexe, phone, occupation, age, moderator } = this;
       axios
         .post("api/register", {
@@ -173,9 +199,9 @@ export default {
           moderator,
         })
         .then((res) => {
-         if (res.data.status == "success") {
-            this.errors = [];
-
+          if (res.data.status == "success") {
+            this.names.push(this.name);
+              this.errors = [];
             this.loading = false;
             (this.name = ""),
               (this.email = ""),
@@ -192,9 +218,13 @@ export default {
             }, 4000);
           }
         })
-        .catch(({ response })=> {
-          this.errors = response.data.errors;
-            this.loading = false;
+        .catch(({ response }) => {
+          if (response.status === 422) {
+            this.errors = response.data.errors;
+          }else{
+            this.errors = []
+          } 
+          this.loading = false;
         });
     },
 
@@ -206,9 +236,52 @@ export default {
       document.body.appendChild(link);
       link.click();
     },
+
+    selectName(name){
+      this.name = name + " " ;
+    },
+
+    getAllNames() {
+      axios.get("api/getnames").then((response) => {
+        this.names = response.data.names;
+      });
+    },
   },
 };
 </script>
 
 <style>
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  border: 1px solid #d4d4d4;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+/* .autocomplete-active {
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+} */
 </style>

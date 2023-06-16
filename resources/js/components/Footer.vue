@@ -53,7 +53,7 @@
             <span class="fa-li"><i class="fa fa-phone"></i></span><span class="ms-2">+216 70 867 014</span>
           </li>
           <li class="mb-3">
-            <span class="fa-li"><i class="fa fa-print"></i></span><span class="ms-2">+ +216 70 201 280</span>
+            <span class="fa-li"><i class="fa fa-print"></i></span><span class="ms-2">+216 70 201 280</span>
           </li>
         </ul>
       </div>

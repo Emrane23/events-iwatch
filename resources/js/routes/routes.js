@@ -8,7 +8,9 @@ import Register from "../components/Register.vue";
 import Home from "../components/Home.vue";
 import Contact from "../components/Contact.vue";
 import Profil from "../components/Profile.vue";
-import { defineAsyncComponent } from 'vue'
+import ForgotPassword from "../components/ForgotPassword.vue";
+import ResetPasswordForm from "../components/ResetPasswordForm.vue";
+import Calendar from "../components/EventsCalendar.vue";
 import NProgress from 'nprogress';
 import store from "../store";
 
@@ -22,6 +24,24 @@ const routes = [
         meta: {
             middleware: "accessible",
             title: `Home`
+        }
+    },
+    {
+        path: '/reset-password',
+        name: 'reset-password',
+        component: ForgotPassword,
+        meta: {
+            middleware: "guest",
+            title: `Forgot password`
+        }
+    },
+    {
+        path: '/reset-password/:token',
+        name: 'reset-password-form',
+        component: ResetPasswordForm,
+        meta: {
+            middleware: "guest",
+            title: `Reset password`
         }
     },
     {
@@ -69,6 +89,15 @@ const routes = [
             title: `participation`
         }
     },
+    {
+        path: "/calendar",
+        name: "calendar",
+        component:Calendar ,
+        meta: {
+            middleware: "accessible",
+            title: `Events calendar`
+        }
+    },
     // {
     //     path:'/:pathMatch(.*)' , 
     //     component: NotFoundComponent,
@@ -106,24 +135,24 @@ router.beforeEach(async (to, from, next) => {
         next()
     } else {
         if (to.meta.middleware == "protected") {
-           const setUser = await store.dispatch('getUser').then((response) => {
+            const setUser = await store.dispatch('getUser').then((response) => {
 
-               if (store.state.userToken && store.state.user.roles.length < 1) {
-                   next()
-               } else {
-                   if (!store.state.userToken) {
-                       store.commit("setAlert", ["Désolé, vous devez d'abord vous connecter!", "warning"])
-                       next({ name: "login" })
-                   } else if (to.meta.middleware == "protected" && store.state.user.roles.length > 0) {
-                       store.commit("setAlert", ["Désolé, vous n'êtes pas autorisé à accéder à la page requise!", "danger"])
-                       next({ name: "home" })
-                   }
-               }
+                if (store.state.userToken && store.state.user.roles.length < 1) {
+                    next()
+                } else {
+                    if (!store.state.userToken) {
+                        store.commit("setAlert", ["Désolé, vous devez d'abord vous connecter!", "warning"])
+                        next({ name: "login" })
+                    } else if (to.meta.middleware == "protected" && store.state.user.roles.length > 0) {
+                        store.commit("setAlert", ["Désolé, vous n'êtes pas autorisé à accéder à la page requise!", "danger"])
+                        next({ name: "home" })
+                    }
+                }
 
-           }).catch(()=>{
-            store.commit("setAlert", ["Désolé, vous devez d'abord vous connecter!", "warning"])
-                       next({ name: "login" })
-           }) ;
+            }).catch(() => {
+                store.commit("setAlert", ["Désolé, vous devez d'abord vous connecter!", "warning"])
+                next({ name: "login" })
+            });
         }
 
     }
@@ -132,6 +161,6 @@ router.beforeEach(async (to, from, next) => {
 router.afterEach(() => {
     // Complete the animation of the route progress bar.
     NProgress.done()
-  })
+})
 
 export default router;

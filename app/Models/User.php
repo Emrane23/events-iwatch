@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -73,7 +73,22 @@ class User extends Authenticatable
         'created_at',
     ];
 
-    public function participation(){
-        return $this->belongsToMany(Panel::class , 'participations', 'user_id','panel_id')->withTimestamps();
+    public function participation()
+    {
+        return $this->belongsToMany(Panel::class, 'participations', 'user_id', 'panel_id')->withTimestamps();
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_users');
+        
+    }
+
+    /**
+     * Override the mail body for reset password notification mail.
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\MailResetPasswordNotification($token));
     }
 }

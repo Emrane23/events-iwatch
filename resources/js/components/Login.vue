@@ -8,7 +8,7 @@
       <div class="col-12 col-md-6 offset-md-3">
         <div class="card shadow sm">
           <div class="card-body">
-            <h1 class="text-center">Login</h1>
+            <h3 class="text-center">Connectez-vous</h3>
             <hr />
             <form action="javascript:void(0)" class="row" method="post">
               <div
@@ -34,7 +34,7 @@
                 />
               </div>
               <div class="form-group col-12 my-2">
-                <label for="password" class="font-weight-bold">Password</label>
+                <label for="password" class="font-weight-bold">Mot de passe</label>
                 <input
                   type="password"
                   v-model="password"
@@ -54,17 +54,19 @@
                     v-if="processing"
                     class="spinner-border spinner-border-sm"
                   ></div>
-                  <template v-else> Login</template
+                  <template v-else>Se Connecter</template
                   >
                 </button>
               </div>
-              <div class="col-12 text-center">
-                <label
-                  >Don't have an account?
-                  <router-link to="/register">Register Now!</router-link></label
-                >
-              </div>
             </form>
+              <div class="text-center mb-3">
+                  <router-link to="/reset-password">Mot de passe oublié ?</router-link>
+              </div>
+              <hr class="hr hr-blurry" />
+              <div class="text-center">
+                Vous n'avez pas de compte? 
+                  <router-link to="/register">Créer maintenant!</router-link>
+              </div>
           </div>
         </div>
       </div>
@@ -109,8 +111,10 @@ export default {
             if (response.status === 401) {
                 this.processing = false;
                 this.validationErrors = response.data.error;
+          }else if(response.status === 429){
+            this.validationErrors = response.data.error;
           } else {
-                this.validationErrors = '';
+                this.validationErrors = [];
                 alert("error 500! something went wrong *.* ");
           }
         }).finally(()=> {

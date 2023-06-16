@@ -35,6 +35,8 @@ import App from './components/App.vue';
 app.component('app', App);
 import Footer from './components/Footer.vue';
 app.component('footer-component', Footer);
+import Breadcrumb from './components/Breadcrumb.vue';
+app.component('breadcrumb-component', Breadcrumb);
 
 /**
  * The following block of code may be used to automatically register your

@@ -156,9 +156,9 @@ return [
     | Example: [ 'fa' => storage_path('app/fontawesome') ]
     */
 
-    'icons'         => [
-        'orc' => \Orchid\IconPack\Path::getFolder(),
-    ],
+    // 'icons'         => [
+    //     'orc' => \Orchid\IconPack\Path::getFolder(),
+    // ],
 
     /*
     |--------------------------------------------------------------------------

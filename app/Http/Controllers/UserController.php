@@ -37,4 +37,11 @@ class UserController extends Controller
         $user->update($request->all());
         return response()->json(['user' => $user, 'qr_code' => $filename], 200);
     }
+
+    public function getNames (){
+        
+        $names = User::pluck('name');
+        return response()->json(['names' => $names], 200);
+
+    }
 }

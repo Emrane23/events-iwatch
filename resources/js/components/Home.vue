@@ -11,7 +11,7 @@
     <div class="image">
       <img
         width="400"
-        src="https://mall-mac.iwatch.tn/assets/images/banner/integrity.jpg"
+        src="/images/integrity.jpg"
       />
     </div>
     <router-link to="/register" class="d-flex justify-content-center" v-if="!isLogged"

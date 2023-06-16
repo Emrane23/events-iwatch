@@ -9,6 +9,7 @@ const store = createStore({
         userToken: localStorage.getItem('userToken') ? localStorage.getItem('userToken') : null,
         user: null,
         alertMessage:[],
+        qrCapture: null,
     },
     getters: {
         activeLanguage(state) {
@@ -57,13 +58,13 @@ const store = createStore({
             // Echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${state.userToken}`;
         },
         setQrCapture(state,qrCapture){
-
+            state.qrCapture = qrCapture;
         },
         setAlert(state,alert){
             state.alertMessage[0] = alert ;
             setTimeout(() => {
                 state.alertMessage = [];
-              }, 3000);
+              }, 4000);
         }
         
     },

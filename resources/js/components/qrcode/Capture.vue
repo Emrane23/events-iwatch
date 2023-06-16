@@ -1,10 +1,10 @@
 <template>
     <div>
       <div class="mb">
-        Qr Capture
+        
       </div>
       <QrCapture @decode="onDecode" class="mb"></QrCapture>
-      <div class="result">
+      <div class="result" hidden>
         Result: {{data}}
       </div>
     </div>
@@ -31,14 +31,14 @@
       }
     },
     methods:{
-      qrCodeCaptureEvent() {
-      this.$emit("qrCodeCapture", (this.data));
-    },
+    //   qrCodeCaptureEvent() {
+    //   this.$emit("qrCodeCapture", (this.data));
+    // },
     },
     watch:{
       data: function (data, old) {
       if (data) {
-       this.qrCodeCaptureEvent(data);
+        this.$store.commit("setQrCapture", data);
       }
     },
     }

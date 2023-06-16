@@ -5,12 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
-class Participations extends Model
+class Role_users extends Model
 {
-    use HasFactory ;
-
-    protected $fillable = [
-        'user_id','panel_id' 
-    ];
+    use HasFactory;
 }

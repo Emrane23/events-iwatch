@@ -1,7 +1,8 @@
 <template>
   <div class="row justify-content-center">
       <div class="col-md-6 text-center mt-5 mb-4">
-        <h2 class="heading-section">Enregistrer a l'évenement</h2>
+        <h2 class="heading-section">Enregistrer les participant</h2>
+        <breadcrumb-component item_nav="Enregistrer les participant"></breadcrumb-component>
       </div>
     </div>
   <div class="card mb-4 mt-2">

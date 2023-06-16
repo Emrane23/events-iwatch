@@ -8,7 +8,7 @@
     <div class="row mt-3 d-flex justify-content-center">
       <div class="form-group col-md-3 ml-3">
         <select
-          :class="['form-select', panels_checked.length == 0 && data!= null? 'is-invalid' : '']"
+          :class="['form-select form-select', panels_checked.length == 0 && data!= null? 'is-invalid' : '']"
           v-model="selectedEvent"
         >
           <option disabled selected value="">
@@ -19,10 +19,16 @@
           </option>
         </select>
         <div
-          v-if="panels_checked.length == 0"
+          v-if="selectedEvent == null"
           class="invalid-feedback"
         >
-          Vous devez seletionnné minimum un pannel ! 
+        maintenant choisir un événement puis cocher au moins un panel ! 
+        </div>
+        <div
+          v-if="panels_checked.length ==0 && selectedEvent != null"
+          class="invalid-feedback"
+        >
+        Bien! cocher au moins un panel maintenant ! 
         </div>
       </div>
 
@@ -73,7 +79,7 @@
       </div>
     </div>
     <div class="result">Résultat : {{ data }}   
-      <button type="button" @click="participateInEvent()" v-if="data && panels_checked.length>0" class="btn btn-success btn-sm ml-3"> <i class="fa fa-check"></i>Participer</button>
+      <button type="button" @click="participateInEvent()" v-if="data && panels_checked.length>0" class="btn btn-success btn-sm ml-8"> <i class="fa fa-check"></i>Participer</button>
     </div>
   </div>
 </template>
@@ -88,7 +94,6 @@ export default defineComponent({
   components: {
     QrStream,
   },
-  props: ["qrCodeCapture"],
   data() {
     return {
       loading:false,
@@ -113,7 +118,13 @@ export default defineComponent({
       onDecode,
     };
   },
-  
+  computed:{ 
+    qrCapture: {
+      get(){       
+        return this.$store.state.qrCapture;
+      },
+  }
+},
   mounted() {
     this.getEvents();
   },
@@ -146,6 +157,7 @@ export default defineComponent({
               this.loading = false
               setTimeout(() => {
                 this.data = null;
+                console.log(file = document.getElementsByName("Checkme1").value ="") ;
               }, "4000");
             });
     },
@@ -171,8 +183,11 @@ export default defineComponent({
           .catch((err) => console.log(err));
       }
     },
-
-   
+    qrCapture: function (params) {
+      if (params){
+        this.data = params;
+      }
+    }   
   
     // data: function (data, old) {
     //   console.log(old);

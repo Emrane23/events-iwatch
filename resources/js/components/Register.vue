@@ -4,7 +4,7 @@
       <div class="col-12 col-md-6 offset-md-3">
         <div class="card shadow sm">
           <div class="card-body">
-            <h1 class="text-center">S’inscrire</h1>
+            <h3 class="text-center">S’inscrire</h3>
             <hr />
             <form
               action="javascript:void(0)"
@@ -118,16 +118,16 @@
                     :disabled="processing"
                     class="btn btn-primary btn-block"
                   >
-                    {{ processing ? "Please wait" : "Register" }}
+                    {{ processing ? "Please wait" : "S’inscrire" }}
                   </button>
                 </div>
 
               </div>
               <div class="text-center">
                 <label
-                  >Already have an account?
+                  >Vous avez déjà un compte?
                   <router-link :to="{ name: 'login' }"
-                    >Login Now!</router-link
+                    >Connectez-vous!</router-link
                   ></label
                 >
               </div>

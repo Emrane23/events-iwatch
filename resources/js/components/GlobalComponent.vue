@@ -42,6 +42,16 @@
               >Contact
             </router-link>
           </li>
+            <li class="nav-item">
+            <router-link
+              to="/calendar"
+              :class="[
+                'nav-link',
+                this.$route.path == '/calendar' ? 'active' : '',
+              ]"
+              >Calendrier
+            </router-link>
+          </li>
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"

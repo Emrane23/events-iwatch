@@ -28,13 +28,15 @@ Route::resource('participant', ParticipantController::class);
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::post('/login', [AuthController::class, 'login']);
- 
-Route::middleware('auth:api')->group(function () {
-    Route::get('/user',[AuthController::class, 'details'] );
-    Route::post('/logout',[AuthController::class, 'logout'] );
-    Route::post('/updateprofile',[UserController::class, 'updateProfile'] );
-    Route::get('/getevent',[EventController::class, 'index'] );
-    Route::get('/searchpanel/{event}',[EventController::class, 'searchPanel'] );
-    Route::post('/participateinevent',[ParticipationsController::class, 'participateInEvent'] );
-});
+Route::post('/reset-password', [AuthController::class, 'sendPasswordResetLink']);
 
+Route::post('/reset/password', [AuthController::class, 'callResetPassword']);
+Route::middleware('auth:api')->group(function () {
+    Route::get('/user', [AuthController::class, 'details']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/updateprofile', [UserController::class, 'updateProfile']);
+    Route::get('/getevent', [EventController::class, 'index']);
+    Route::get('/searchpanel/{event}', [EventController::class, 'searchPanel']);
+    Route::post('/participateinevent', [ParticipationsController::class, 'participateInEvent']);
+    Route::get('/getnames', [UserController::class, 'getNames']);
+});

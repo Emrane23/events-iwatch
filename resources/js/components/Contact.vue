@@ -4,6 +4,7 @@
       <div class="row justify-content-center">
         <div class="col-md-6 text-center mb-4 mt-5">
           <h2 class="heading-section">Contactez-nous</h2>
+          <breadcrumb-component item_nav="Contactez-nous"></breadcrumb-component>
         </div>
       </div>
       <div class="row justify-content-center">

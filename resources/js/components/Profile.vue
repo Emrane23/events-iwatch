@@ -2,6 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-md-6 text-center mb-4 mt-5">
       <h2 class="heading-section">Profile</h2>
+      <breadcrumb-component item_nav="Profile"></breadcrumb-component>
     </div>
   </div>
   <div class="card shadow sm mb-5">
@@ -132,8 +133,10 @@
 <script>
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import Breadcrumb from './Breadcrumb.vue';
 
 export default {
+  components: { Breadcrumb },
   data() {
     return {
       processing: false,
@@ -143,7 +146,7 @@ export default {
   },
   computed: {
     user: {
-      get(){       
+      get() {
         return this.$store.state.user;
       },
       // set(value){
@@ -172,7 +175,7 @@ export default {
         })
         .then(async (response) => {
           this.errors = [];
-         await this.$store.commit("setUser", response.data.user);
+          await this.$store.commit("setUser", response.data.user);
           toast.success("Votre profile est mettre à jour avec succès!", {
             autoClose: 3000,
           });
@@ -181,9 +184,10 @@ export default {
         .catch(({ response }) => {
           this.errors = response.data.errors;
           this.processing = false;
-        }).finally(() => {
+        })
+        .finally(() => {
           this.processing = false;
-        });;
+        });
     },
   },
 };
